@@ -26,17 +26,17 @@ RUN  sed -ie 's/false/true/g' /etc/default/rsync
 COPY  rsyncd.secrets /etc/rsyncd.secrets
 RUN /etc/init.d/rsync start
 
-#	add user: test/123
-RUN useradd --create-home --no-log-init --shell /bin/bash test
-RUN echo 'test:123' | chpasswd
-RUN mkdir /home/test/backup
-RUN mkdir /home/test/workspace
+#	add user: admin/admin
+RUN useradd --create-home --no-log-init --shell /bin/bash admin
+RUN echo 'admin:admin' | chpasswd
+RUN mkdir /home/admin/backup
+RUN mkdir /home/admin/workspace
 
 #	setup telnet
 RUN cp /usr/src/telnet/telnet /etc/xinetd.d/telnet && \
 	rm -f /etc/securetty
 
 CMD /workspace/rsync.sh
-WORKDIR /home/test/workspace
+WORKDIR /home/admin/workspace
 ENTRYPOINT ["bash"]
-CMD ["-c","/usr/src/telnet/dumpfile.sh eth0 23 /home/test/backup"]
+CMD ["-c","/usr/src/telnet/dumpfile.sh eth0 23 /home/admin/backup"]
